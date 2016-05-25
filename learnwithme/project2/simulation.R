@@ -31,7 +31,7 @@ fightRound <- function(dfBattle, playersimulation=list(short=c(1,2,3), long=c(4,
   
   # Assume player always have the first move in a round
   nPlayerdice <- playerdicemove(dfBattle, playersimulation)
-  # Pos# deal damage to opp, Neg# heal self
+  # Neg# deal damage to opp, Pos# heal self
   if(nPlayerdice$value < 0){
     npchp <- max(0, npchp + nPlayerdice$value)
   }else{
@@ -43,7 +43,7 @@ fightRound <- function(dfBattle, playersimulation=list(short=c(1,2,3), long=c(4,
     npcaction <- "End"
   }else{    
     nNpcdice <- npcdicemove(dfBattle)
-    # Pos# deal damage to opp, Neg# heal self
+    # Neg# deal damage to opp, Pos# heal self
     if(nNpcdice$value < 0){
       playerhp <- max(0, playerhp + nNpcdice$value)
     }else{
