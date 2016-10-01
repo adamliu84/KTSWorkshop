@@ -8,7 +8,10 @@
     <link rel="stylesheet" href="https://js.arcgis.com/3.18/dojox/widget/ColorPicker/ColorPicker.css">
     <link rel="stylesheet" href="https://js.arcgis.com/3.18/esri/css/esri.css">
     <style>
-      html, body, #map {
+      body {
+       height:700px;
+      }
+      #map {
         height:100%;
         width:100%;
         margin:0;
@@ -26,6 +29,7 @@
     <script src="https://js.arcgis.com/3.18/"></script>
     <script>
       var map;
+      var startcoord = [103.864574, 1.309496];
       
       require([
         "esri/map", "esri/geometry/Point", 
@@ -42,7 +46,7 @@
 
         map = new Map("map",{
           basemap: "osm",
-	  center: [ 103.864, 1.307],
+	  center: startcoord,
           zoom: 17,
         });
         
@@ -50,7 +54,7 @@
       
         function mapLoaded(){
           //Start location
-          var graphic = new Graphic(new Point([103.864574, 1.309496]), new PictureMarkerSymbol("staricon.png",30,30));
+          var graphic = new Graphic(new Point(startcoord), new PictureMarkerSymbol("staricon.png",30,30));
           map.graphics.add(graphic);       
 	  //Food location
           var points =[[103.863,1.305] , [103.860, 1.305], [103.859, 1.312], [103.863,1.303]]
@@ -81,9 +85,13 @@
       });
     </script>
   </head>
-  <body class="claro">
-    <div id="map"></div>
-    <!--<div id="picker1"></div>-->
+  <body>
+    <table id="selectiontable" style="height:100%; width:100%;">
+    <tr>
+    <td style="vertical-align:top">PLACEHOLDER</td>
+    <td><div id="map"></div></td>
+    </tr>
+    </table>
   </body>
 </html>
 
