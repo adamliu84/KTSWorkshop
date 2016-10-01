@@ -89,12 +89,22 @@
           return markerSymbol;
         }
       });
+   
+
+	function textLocationClick(long,lat){
+	    map.centerAt([long,lat]);
+	}   
     </script>
   </head>
   <body>
     <table id="selectiontable" style="height:100%; width:100%;">
     <tr>
-    <td style="vertical-align:top">PLACEHOLDER</td>
+    <!-- HARDCODE location & coordinates first. To be convert to json data-->
+    <td style="vertical-align:top"> <a href="#" onclick="textLocationClick(103.863763, 1.305849);">North Bridge Market</a><br>
+				    <a href="#" onclick="textLocationClick(103.860298, 1.305675);">Hotel Boss</a><br>
+				    <a href="#" onclick="textLocationClick(103.859914, 1.312066);">Pork Organ Soup</a><br>
+				    <a href="#" onclick="textLocationClick(103.863897, 1.303208);">Army Market</a>
+    </td>
     <td><div id="map"></div></td>
     </tr>
     </table>
