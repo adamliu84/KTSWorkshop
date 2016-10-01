@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title>Food Index Around Aperia</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.18/dijit/themes/claro/claro.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.18/dojox/widget/ColorPicker/ColorPicker.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.18/esri/css/esri.css">
+    <style>
+      html, body, #map {
+        height:100%;
+        width:100%;
+        margin:0;
+        padding:0;
+      }
+      .dojoxColorPicker {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        -moz-box-shadow: 0 0 7px #888;
+        -webkit-box-shadow: 0 0 7px #888;
+        box-shadow: 0 0 7px #888;
+      }
+    </style>
+    <script src="https://js.arcgis.com/3.18/"></script>
+    <script>
+      var map;
+      
+      require([
+        "esri/map", "esri/geometry/Point", 
+        "esri/symbols/SimpleMarkerSymbol", "esri/graphic",
+	"esri/symbols/PictureMarkerSymbol",
+        "dojo/_base/array", "dojo/dom-style", "dojox/widget/ColorPicker", 
+        "dojo/domReady!"
+      ], function(
+        Map, Point,
+        SimpleMarkerSymbol, Graphic,
+	PictureMarkerSymbol,
+        arrayUtils, domStyle, ColorPicker
+      ) {
+
+        map = new Map("map",{
+          basemap: "osm",
+	  center: [ 103.864, 1.307],
+          zoom: 17,
+        });
+        
+        map.on("load", mapLoaded);
+      
+        function mapLoaded(){
+          //Start location
+          var graphic = new Graphic(new Point([103.864574, 1.309496]), new PictureMarkerSymbol("staricon.png",30,30));
+          map.graphics.add(graphic);       
+	  //Food location
+          var points =[[103.863,1.305] , [103.860, 1.305], [103.859, 1.312], [103.863,1.303]]
+	  var points =[  {"id":"North Bridge Market" , "coord":[103.863763,1.305849]},
+		         {"id":"Hotel Boss", "coord":[103.860298, 1.305675]},
+                         {"id":"Pork Organ Soup", "coord":[103.859914, 1.312066]},
+                         {"id":"Army Market" ,"coord":[103.863897,1.303208]}
+                       ];
+          arrayUtils.forEach(points, function(point) {
+            var graphic = new Graphic(new Point(point.coord), createSymbol(point));
+            map.graphics.add(graphic);
+          });
+          map.graphics.on("click", function(e){
+	     var node = e.graphic;
+             console.log(node.symbol.locationid);
+	   });
+        }
+        
+        function createSymbol(location){
+	  markerSymbol = new PictureMarkerSymbol();
+	  markerSymbol.locationid = location.id;
+	  markerSymbol.locationcoord = location.coord;
+	  markerSymbol.setHeight(30);
+	  markerSymbol.setWidth(30);
+	  markerSymbol.setUrl("foodicon.png")
+          return markerSymbol;
+        }
+      });
+    </script>
+  </head>
+  <body class="claro">
+    <div id="map"></div>
+    <!--<div id="picker1"></div>-->
+  </body>
+</html>
+
