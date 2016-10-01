@@ -57,7 +57,6 @@
           var graphic = new Graphic(new Point(startcoord), new PictureMarkerSymbol("staricon.png",30,30));
           map.graphics.add(graphic);       
 	  //Food location
-          var points =[[103.863,1.305] , [103.860, 1.305], [103.859, 1.312], [103.863,1.303]]
 	  var points =[  {"id":"North Bridge Market" , "coord":[103.863763,1.305849]},
 		         {"id":"Hotel Boss", "coord":[103.860298, 1.305675]},
                          {"id":"Pork Organ Soup", "coord":[103.859914, 1.312066]},
@@ -69,8 +68,14 @@
           });
           map.graphics.on("click", function(e){
 	     var node = e.graphic;
-             console.log(node.symbol.locationid);
-             map.centerAt(e.mapPoint)
+             if(null != node.symbol.locationid){
+		 //https://developers.arcgis.com/javascript/3/jshelp/intro_formatinfowindow.html
+		 //https://developers.arcgis.com/javascript/3/samples/map_infowindow/
+		 map.infoWindow.setTitle("Food Listing");
+		 map.infoWindow.setContent("<p>Food @ "+node.symbol.locationid);
+		 map.infoWindow.show(e.mapPoint, map.getInfoWindowAnchor(e.screenPoint));
+		 map.centerAt(e.mapPoint);
+	     }             
 	   });
         }
         
