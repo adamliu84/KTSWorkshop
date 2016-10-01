@@ -70,6 +70,7 @@
           map.graphics.on("click", function(e){
 	     var node = e.graphic;
              console.log(node.symbol.locationid);
+             map.centerAt(e.mapPoint)
 	   });
         }
         
