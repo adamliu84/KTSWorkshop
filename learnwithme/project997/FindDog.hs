@@ -41,7 +41,7 @@ initTraverse coord@(row,col)
 
 targetTraverse :: [Coord] -> Coord -> [Coord]
 targetTraverse prevCoord curDirection
-    | latestrow < minrow || latestrow > maxrow || latestcol < mincol || latestcol > maxcol = [(maxrow,maxrow)]
+    | latestrow < minrow || latestrow > maxrow || latestcol < mincol || latestcol > maxcol = []
     | length prevCoord > length target = []
     | length prevCoord == length target && curString == target = prevCoord
     | getMatrixChar curCoord == target!!(length prevCoord) = targetTraverse (prevCoord++[curCoord]) curDirection
