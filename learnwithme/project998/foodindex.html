@@ -30,12 +30,13 @@
     <script>
       var map;
       var startcoord = [103.864574, 1.309496];
-      
+      var getCurrentLocation;
+
       require([
-        "esri/map", "esri/geometry/Point", 
+        "esri/map", "esri/geometry/Point",
         "esri/symbols/SimpleMarkerSymbol", "esri/graphic",
 	"esri/symbols/PictureMarkerSymbol",
-        "dojo/_base/array", "dojo/dom-style", "dojox/widget/ColorPicker", 
+        "dojo/_base/array", "dojo/dom-style", "dojox/widget/ColorPicker",
         "dojo/domReady!"
       ], function(
         Map, Point,
@@ -49,13 +50,13 @@
 	  center: startcoord,
           zoom: 17,
         });
-        
+
         map.on("load", mapLoaded);
-      
+
         function mapLoaded(){
           //Start location
           var graphic = new Graphic(new Point(startcoord), new PictureMarkerSymbol("staricon.png",30,30));
-          map.graphics.add(graphic);       
+          map.graphics.add(graphic);
 	  //Food location
 	  var points =[  {"id":"North Bridge Market" , "coord":[103.863763,1.305849]},
 		         {"id":"Hotel Boss", "coord":[103.860298, 1.305675]},
@@ -75,10 +76,10 @@
 		 map.infoWindow.setContent("<p>Food @ "+node.symbol.locationid);
 		 map.infoWindow.show(e.mapPoint, map.getInfoWindowAnchor(e.screenPoint));
 		 map.centerAt(e.mapPoint);
-	     }             
+	     }
 	   });
         }
-        
+
         function createSymbol(location){
 	  markerSymbol = new PictureMarkerSymbol();
 	  markerSymbol.locationid = location.id;
@@ -88,12 +89,34 @@
 	  markerSymbol.setUrl("foodicon.png")
           return markerSymbol;
         }
+
+        function createPikachu(location){
+      markerSymbol = new PictureMarkerSymbol();      
+      markerSymbol.locationcoord = location.coord;
+      markerSymbol.setHeight(30);
+      markerSymbol.setWidth(30);
+      markerSymbol.setUrl("pikachu.png")
+          return markerSymbol;
+        }
+
+        getCurrentLocation = function getCurrentLocationInternal(){
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position){
+                    textLocationClick(position.coords.longitude,position.coords.latitude);
+                    var point = {"id":"Pikachu~!", "coord":[position.coords.longitude, position.coords.latitude]}
+                    var graphic = new Graphic(new Point(point.coord), createPikachu(point));
+                    map.graphics.add(graphic);
+                });
+            } else {
+                x.innerHTML = "Geolocation is not supported by this browser.";
+            }
+        }
+
       });
-   
 
 	function textLocationClick(long,lat){
 	    map.centerAt([long,lat]);
-	}   
+	}
     </script>
   </head>
   <body>
@@ -103,11 +126,11 @@
     <td style="vertical-align:top"> <a href="#" onclick="textLocationClick(103.863763, 1.305849);">North Bridge Market</a><br>
 				    <a href="#" onclick="textLocationClick(103.860298, 1.305675);">Hotel Boss</a><br>
 				    <a href="#" onclick="textLocationClick(103.859914, 1.312066);">Pork Organ Soup</a><br>
-				    <a href="#" onclick="textLocationClick(103.863897, 1.303208);">Army Market</a>
+				    <a href="#" onclick="textLocationClick(103.863897, 1.303208);">Army Market</a><br>
+                    <button onclick="getCurrentLocation();">Get current location</button>
     </td>
     <td><div id="map"></div></td>
     </tr>
     </table>
   </body>
 </html>
-
