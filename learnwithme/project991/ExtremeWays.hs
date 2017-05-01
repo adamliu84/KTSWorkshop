@@ -38,6 +38,16 @@ genTrie cur bank = sum $ map (\x-> checkgen (cur++[x]) (delete x bank)) newbank
                     else
                        filter (\x -> (last cur) /= x) bank
 
+-- Method 3 : List comprehension (permutations implementation with check)
+permAlone'' :: String -> Int
+permAlone'' x = length $ genList x
+
+genList :: String -> [String]
+genList [x] = [[x]]
+genList xs = [ a:b | a <- xs , b <- checker a $ genList (delete a xs) ]
+    where checker :: Char -> [String] -> [String]
+          checker a' b' = filter (\t -> head t /= a') b'
+
 main :: IO ()
 main = do
     start <- getTime Monotonic
@@ -50,5 +60,10 @@ main = do
     end' <- getTime Monotonic
     fprint (timeSpecs % "\n") start' end'
 
-    let result = zip3 input temp temp'
+    start'' <- getTime Monotonic
+    temp'' <- evaluate (map permAlone'' input)
+    end'' <- getTime Monotonic
+    fprint (timeSpecs % "\n") start'' end''
+
+    let result = zip4 input temp temp' temp''
     mapM_ print result
